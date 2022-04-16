@@ -2,7 +2,9 @@
 ; This programm takes a text and char from the console and prints the 
 ; the positions the char is found at.
 ; If the text does not contain the char nothing is written to the console.
-; Max length accepted is 98.
+; Max text length accepted is 98.
+; Note that spaces are seen as characters too. Therefore, enter the char 
+; without spaces.
 ;-------------------------------------------------------------------------
 
 .386                                       ; Use the 386 instruction set
