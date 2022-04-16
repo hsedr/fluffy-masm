@@ -2,7 +2,7 @@
 ; This programm takes a text and char from the console and prints the 
 ; the positions the char is found at.
 ; If the text does not contain the char nothing is written to the console.
-; Max length accepted is 100.
+; Max length accepted is 98.
 ;-------------------------------------------------------------------------
 
 .386                                       ; Use the 386 instruction set
@@ -27,7 +27,7 @@ includelib \masm32\lib\masm32.lib
     index dd 0                              ; offset used for storing values in var result
    
 .code                                           
-start:                                      ; Starting point for your main code
+start:                                      ; Starting point for the main code
     call main
 
     invoke ExitProcess, 0      
@@ -43,13 +43,13 @@ main endp
 
 search proc
     
-    lea esi, char_buffer                    ; esi is assumed to be the source operand
-    mov ecx, sizeof char_buffer             ; ecx is assumed to be length of the String 
-    cld                                     ; direction flag 0
-    lodsb                                   ; char_buffer is loaded into eax
-    mov bl, al                              ; value is saved in ebx
+    lea esi, char_buffer                ; esi is assumed to be the source operand
+    mov ecx, sizeof char_buffer         ; ecx is assumed to be length of the String 
+    cld                                 ; direction flag 0
+    lodsb                               ; char_buffer is loaded into eax
+    mov bl, al                          ; value is saved in ebx
     
-    lea esi, text_buffer                    ; see above
+    lea esi, text_buffer                ; see above
     mov ecx, sizeof text_buffer
     cld
         
@@ -58,7 +58,7 @@ loop_:
     cmp al, 0                           ; base case is char 0, indicates end of the array
     je print_                           ; if true result is printed
     dec ecx                             ; else ecx is decremented
-    jcxz print_                         ; in the other that case ecx is 0 the result is printed
+    jcxz print_                         ; in case ecx is 0 the result is printed
     cmp al, bl                          ; the char_buffer and loaded char from text_buffer are compared
     je equal_found                      ; if equal equal_found is jumped to
     jne loop_                           
@@ -66,9 +66,9 @@ loop_:
 equal_found:                            # note that the variable index here is used as an offset
     push eax                            ; eax is saved
     mov eax, index                      ; index is loaded to eax
-    mov [result + eax], ecx             ; current value of ecx is moved to result + offset
-    call incIndex                       ; index is increased
-    pop eax         
+    mov [result + eax], ecx             ; current value of ecx is moved to address of result + offset
+    call incIndex                       ; index/offset is increased
+    pop eax                             ; eax popped back
     jmp loop_
 
 print_:
@@ -79,15 +79,15 @@ print_:
 
 repeat_:
     mov ebx, sizeof text_buffer         ; size of array is loaded again bc it is used for a calculation later
-    mov eax, [result + ecx]             ; index is loaded into eax, ecx is the offset, see equal_found
+    mov eax, [result + ecx]             ; index stored in result is loaded into eax, ecx is the offset, see equal_found
     cmp eax, 0                          ; base case is index of zero
                                         ; note that result is declared with 100 dup(0)
                                         ; 0 therefore indicates that no other indexes are left for us to read
     je end_                             ; if true we jump to the end 
     push ecx                            ; otherwise we save ecx
-    sub ebx, eax                        ; difference between array length and the inde gives us actual position
+    sub ebx, eax                        ; difference between array length and the index gives us actual position
     printf("%d ", ebx)                  ; print position
-    pop ecx                     
+    pop ecx                             
     add ecx, 4                          ; offset is increased
     jmp repeat_                 
 end_:   
