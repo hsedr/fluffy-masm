@@ -36,15 +36,15 @@ find_chars proc
 
         cmp al, bl                          ; compare the two characters
         push ecx                            ; push ecx to stack to avoid trashing
-        jz match_                           ; if they are equal, jump to match_ label
-        jmp repeat_
+        jz print_                           ; if they are equal, jump to print_ label
+        jmp repeat_                         ; else repeat
 
     repeat_:
         pop ecx                             ; retrieve ecx from stack
         inc ecx                             ; increment ecx (index) by one
         jmp main_                           ; start 'next round'
 
-    match_:       
+    print_:       
         mov edx, 0                          ; set edx to 0 for upcoming division
         mov al, cl                          ; prepare for division (index / 10) in al
         mov cx, 10
