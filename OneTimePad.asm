@@ -36,40 +36,40 @@ main proc
 	invoke StdOut, addr msg2
 	invoke StdIn, addr key_buffer, 100
 
-	mov edx, -1						     ; reset offset
+	mov edx, -1				; reset offset
 	
 loadChar_:
-	add edx, 1						      ; offset
+	add edx, 1				; offset
 	lea esi, [buffer + edx]			; load source address			
-	mov ecx, 1						      ; length of character
-	cld								          ; clear direction flag
-	lodsb							          ; load character to eax
-	cmp al, 0						        ; if character is zero, end is reached
-	jnz encode_						      ; if not, character is encoded
-									            ; else, result text is printed
-	mov edx, -1						      ; reset offset
+	mov ecx, 1				; length of character
+	cld					; clear direction flag
+	lodsb					; load character to eax
+	cmp al, 0				; if character is zero, end is reached
+	jnz encode_				; if not, character is encoded
+						; else, result text is printed
+	mov edx, -1				; reset offset
 	jmp print_						
 
 encode_:	
-	mov ebx, eax					      ; save eax to ebx
-	lea esi, [key_buffer + edx]	; load address of key
-	lodsb							          ; load key to eax
-	add al, bl						      ; encrypt: character + key = new letter
-	jmp modulo_						      ; compute -> eax mod 26
+	mov ebx, eax				; save eax to ebx
+	lea esi, [key_buffer + edx]		; load address of key
+	lodsb					; load key to eax
+	add al, bl				; encrypt: character + key = new letter
+	jmp modulo_				; compute -> eax mod 26
 	
 continue_:
 	lea edi, [buffer + edx]			; load destination address
-	stosb							          ; replace old value at the destination address
-	jmp loadChar_					      ; repeat
+	stosb					; replace old value at the destination address
+	jmp loadChar_				; repeat
 
 modulo_:
-	push edx						        ; save edx, because it will be altered
-	sub eax, 129					      ; subtracting 129 gives the decimal value we need for further computation
-	xor edx, edx					      ; edx = 0
-	mov ebx, 26						      ; ebx = 26
-	div ebx							        ; eax mod 26 -> will be stored in edx
-	mov eax, edx					      ; index of the new letter in the alphabet -> stored in eax
-	add eax, 65						      ; adding 65 will give the ASCII-Code for the new letter (in upper case)
+	push edx				; save edx, because it will be altered
+	sub eax, 129				; subtracting 129 gives the decimal value we need for further computation
+	xor edx, edx				; edx = 0
+	mov ebx, 26				; ebx = 26
+	div ebx					; eax mod 26 -> will be stored in edx
+	mov eax, edx				; index of the new letter in the alphabet -> stored in eax
+	add eax, 65			        ; adding 65 will give the ASCII-Code for the new letter (in upper case)
 	pop edx							
 	jmp continue_
 
