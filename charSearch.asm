@@ -1,4 +1,5 @@
 ;-------------------------------------------------------------------------
+; @author hsedr
 ; This programm takes a text and char from the console and prints the 
 ; the positions the char is found at.
 ; If the text does not contain the char nothing is written to the console.
